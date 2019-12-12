@@ -1,0 +1,63 @@
+<html>
+	<head>
+	
+	</head>
+	
+	<body>
+	
+		<div>
+		<h1>Send a message</h1>
+			<input type="text" id="messagetext">
+			<button id="send">Send</button>
+		
+		</div>
+		<div >
+			<table id="messages">
+
+			</table>
+		</div>
+		
+		<script
+			  src="https://code.jquery.com/jquery-3.4.1.min.js"
+			  integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+			  crossorigin="anonymous"></script>
+		<script>
+		let loadMessages = function () {
+			$.get(
+	                '/messages',
+	               
+	                function(result) {
+	                	let messagesRows = "";
+	                    for (let i = 0; i < result.length; i++) {
+	                    	messagesRows = messagesRows + "<tr><td>" + result[i].text + "</td></tr>"
+	                    }
+	                    console.log(messagesRows);
+	                    $('#messages').html(messagesRows);
+	                }
+	            )
+			
+		}
+		
+		$(document).ready(function() {
+		    loadMessages();
+		    
+		    $('#send').on("click", function() {
+                $.post(
+                '/messages',
+                {
+                    message : $("#messagetext").val()
+                },
+                function(result) {
+                    loadMessages();
+                }
+            )
+            })
+		});
+		
+
+		
+		</script>
+	</body>
+
+
+</html>
